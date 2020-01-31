@@ -1,7 +1,9 @@
 import BaseHTTPServer
 
-HOST_NAME="192.168.2.1" # local values
-PORT_NUMBER = 80
+import os, cgi
+
+HOST_NAME="192.168.1.111" # local values
+PORT_NUMBER = 8000
 
 class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
@@ -15,6 +17,29 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
     # handling GET request -> reading from client (preparing the HTTP reqest)
     def do_POST(s):
+
+        # detecting the /store
+        if s.path == '/store':
+            try:
+                # getting the content-type
+                ct, content = cgi.parse_header(s.headers.getheader('content-type'))
+                if ct == 'multipart/form-data': # checking if request comes with multipart
+                    fs = cgi.FieldStorage(fp = s.rfile, headers = s.headers, environ= {'REQUEST_METHOD':'POST'}) # using the FStorage class
+                else:
+                    print("[-] Unexpected POST request")
+
+                # grabbing the file for FieldStorage
+                fs_up = fs['file']
+                # opening the placeholder for writing (binary)
+                with open('./transfer/file', 'wb') as o:
+                    o.write(fs_up.file.read()) # writing sentence
+                    # closing the request
+                    s.send_response(200)
+                    s.end_headers()
+
+            except Exception as e:
+                raise
+
         s.send_response(200)
         s.end_headers()
         length = int(s.headers['Content-Length']) # length passed and converted to INT
