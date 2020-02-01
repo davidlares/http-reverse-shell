@@ -1,4 +1,4 @@
-# TCP Reverse Shell
+# HTTP Reverse Shell
 
 The following is a refactored version for the `HTTP` protocol. The `TCP` version for this software is [here](https://github.com/davidlares/tcp-reverse-shell)
 
@@ -30,13 +30,6 @@ Let me summarize this into single steps.
 4. Once the client received, a `CMD` process will start for the `POST` method
 5. TO make sure it cannot be banned, a 3-second sleep will set between requests
 
-## Persisting backdoor logic
-
-The whole point of infecting a machine is, first besides "attacking" is to persist the connection to gather information more than once. For that there's the `persistence.py` file, it contains a full logic for generating a `Windows User Registry` and performs a `directory reconnaissance` to check if the `backdoor` file is present on a certain hard-coded directory.
-
-This is done by creating a copy of the binary file in a different path (even when it could be deleted). And adding an `HKEY_CURRENT_USER` programmatically that let the program run and start automatically even if the machine if booted.
-
-
 ## How to use
 
 First, the attacker should be listening to client connections by specifying a common IP and port for the `TCP` connection, both are hard-coded on the `client.py` and the `server.py` files. So, you should start running the `server.py` file before listening to client connections with the right network values (IP and ports).
@@ -46,6 +39,13 @@ Once the reverse `TCP tunnel` is made, we got the user-input that is sent to the
 The `setup.py` file is needed for creating the `client.exe` binary. You will need to download the `py2exe 0.6.9 exe` file from the internet (python 2.x is required) an run it inside a Windows machine. Important: you should have both files (`client.py` and `setup.py`) at the same level as the installer.
 
 There's an example of the `client.exe` with the log, on the `dist` directory.
+
+## Persisting backdoor logic
+
+The whole point of infecting a machine is, first besides "attacking" is to persist the connection to gather information more than once. For that there's the `persistence.py` file, it contains a full logic for generating a `Windows User Registry` and performs a `directory reconnaissance` to check if the `backdoor` file is present on a certain hard-coded directory.
+
+This is done by creating a copy of the binary file in a different path (even when it could be deleted). And adding an `HKEY_CURRENT_USER` programmatically that let the program run and start automatically even if the machine if booted.
+
 
 ## Code actions
 
