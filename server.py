@@ -17,7 +17,6 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
     # handling GET request -> reading from client (preparing the HTTP reqest)
     def do_POST(s):
-
         # detecting the /store
         if s.path == '/store':
             try:
@@ -38,7 +37,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                     s.end_headers()
 
             except Exception as e:
-                raise
+                print(e)
 
         s.send_response(200)
         s.end_headers()
@@ -52,6 +51,6 @@ if __name__ == "__main__":
     httpd = server_class((HOST_NAME, PORT_NUMBER), MyHandler)
     try:
         httpd.serve_forever() # what it says
-    except KeyboardInterrupt as e:
+    except KeyboardInterrupt:
         print("[-] Server is terminated")
         httpd.server_close()

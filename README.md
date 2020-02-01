@@ -28,7 +28,13 @@ Let me summarize this into single steps.
 2. The client will start a reverse HTTP method (GET request) back to the server.
 3. The server side we are going to start a shell and send the command back to the target
 4. Once the client received, a `CMD` process will start for the `POST` method
-5. TO make sure it cannot be banned, a 3 second sleep will set between requests
+5. TO make sure it cannot be banned, a 3-second sleep will set between requests
+
+## Persisting backdoor logic
+
+The whole point of infecting a machine is, first besides "attacking" is to persist the connection to gather information more than once. For that there's the `persistence.py` file, it contains a full logic for generating a `Windows User Registry` and performs a `directory reconnaissance` to check if the `backdoor` file is present on a certain hard-coded directory.
+
+This is done by creating a copy of the binary file in a different path (even when it could be deleted). And adding an `HKEY_CURRENT_USER` programmatically that let the program run and start automatically even if the machine if booted.
 
 
 ## How to use
