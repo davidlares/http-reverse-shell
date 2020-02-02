@@ -35,9 +35,9 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                     # closing the request
                     s.send_response(200)
                     s.end_headers()
-
             except Exception as e:
                 print(e)
+            return
 
         s.send_response(200)
         s.end_headers()
